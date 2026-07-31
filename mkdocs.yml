@@ -1,0 +1,26 @@
+site_name: H3 Docs
+site_description: Documentation for the h3 empirical HTC harness.
+site_url: https://usevulcan.app/h3
+repo_url: https://github.com/vulcan-energy/hem-htc-harness
+repo_name: vulcan-energy/hem-htc-harness
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - content.code.copy
+markdown_extensions:
+  - admonition
+  - attr_list
+  - tables
+  - toc:
+      permalink: true
+nav:
+  - Overview: index.md
+  - Methodology: methodology.md
+  - CLI Usage: cli.md
+  - Flags Reference: flags.md
+  - Outputs: outputs.md
+  - Browser demo: demo.md
+  - Codebase: codebase.md

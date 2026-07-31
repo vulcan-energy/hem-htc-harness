@@ -1,0 +1,43 @@
+Heat transfer coefficient,W / K,80.74126050567553
+Fabric heat transfer coefficient,W / K,42.01192580152672
+Thermal bridges heat transfer coefficient,W / K,9.8784
+Ventilation heat transfer coefficient,W / K,28.850934704148813
+Air changes per hour (static),1/h,0.4464757039965639
+Heat loss parameter,W / m2.K,1.0782753806847694
+Heat capacity parameter,kJ / m2.K,255.85016025641028
+Heat loss form factor,,2.2177617521367523
+Per-element fabric breakdown:
+Fabric element: Z1_exw_N_GF_6 (Opaque),W / K,0.9799199999999999
+Fabric element: Z1_exw_S_GF_8 (Opaque),W / K,1.03932
+Fabric element: Z1_exf_|_GF_1 (Ground),W / K,2.8548
+Fabric element: Z1_win_N_GF_7 (Transparent),W / K,3.1259541984732833
+Fabric element: Z1_win_S_GF_8 (Transparent),W / K,2.7480916030534357
+Fabric element: Z1_inw_x_GF_1 (AdjacentConditioned),W / K,0
+Fabric element: Z2_exw_N_1F_1 (Opaque),W / K,1.9529999999999998
+Fabric element: Z2_exw_W_1F_2 (Opaque),W / K,2.7828
+Fabric element: Z2_exw_S_1F_3 (Opaque),W / K,1.7676
+Fabric element: Z2_exw_W_GF_4 (Opaque),W / K,3.47328
+Fabric element: Z2_exw_N_GF_5 (Opaque),W / K,0.567
+Fabric element: Z2_exw_S_GF_7 (Opaque),W / K,0.6969599999999999
+Fabric element: Z2_exf_|_GF_2 (Ground),W / K,2.0137
+Fabric element: Z2_exr_|_1F_1 (Opaque),W / K,4.1194999999999995
+Fabric element: Z2_win_N_1F_1 (Transparent),W / K,0.8244274809160307
+Fabric element: Z2_win_N_1F_2 (Transparent),W / K,1.6374045801526722
+Fabric element: Z2_win_S_1F_3 (Transparent),W / K,2.4045801526717554
+Fabric element: Z2_win_S_1F_4 (Transparent),W / K,1.236641221374046
+Fabric element: Z2_win_W_1F_5 (Transparent),W / K,2.908396946564886
+Fabric element: Z2_win_N_GF_6 (Transparent),W / K,2.1641221374045805
+Fabric element: Z2_win_N_GF_9 (Transparent),W / K,0.8244274809160307
+Fabric element: Z2_doo_S_GF_1 (Opaque),W / K,1.89
+Fabric element: Z2_inw_|_GF_2 (AdjacentConditioned),W / K,0
+Fabric element: Z2_inw_x_1F_3 (AdjacentConditioned),W / K,0
+Fabric element: Z2_inw_|_1F_4 (AdjacentConditioned),W / K,0
+Fabric element: Z2_inw_|_1F_5 (AdjacentConditioned),W / K,0
+Fabric element: Z2_inw_|_1F_6 (AdjacentConditioned),W / K,0
+Fabric element: Z2_inw_|_1F_7 (AdjacentConditioned),W / K,0
+Fabric element: Z1_inw_x_GF_1 (AdjacentConditioned),W / K,0
+Fabric element: Z2_par_|_1F_1 (AdjacentConditioned),W / K,0
+Fabric element: Z2_par_|_GF_2 (AdjacentConditioned),W / K,0
+Assumptions used for HTC/HLP calculation:
+Internal air temperature,Celsius,20
+External air temperature,Celsius,-1.191666666666667

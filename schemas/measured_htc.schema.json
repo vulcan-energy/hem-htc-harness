@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/vulcan-energy/hem-htc-harness/schemas/measured_htc.schema.json",
+  "title": "Measured HTC",
+  "description": "A measured Heat Transfer Coefficient value with provenance metadata. In current h3 workflows, htc_value_w_per_k is the calibration target and an index window can be used to align analysis rows.",
+  "type": "object",
+  "required": ["schema_version", "htc_value_w_per_k"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "description": "Schema version identifier.",
+      "const": "0.1"
+    },
+    "htc_value_w_per_k": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "The measured whole-building HTC in watts per kelvin (W/K). This is the primary numeric target used by h3 run/calibrate comparisons."
+    },
+    "uncertainty_w_per_k": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Uncertainty on the HTC value (+/-W/K), or null if unknown. Stored for provenance and future weighting; not currently used in h3 calculations."
+    },
+    "window": {
+      "oneOf": [
+        {
+          "type": "object",
+          "description": "Index-based observation window.",
+          "required": ["type", "start_idx", "end_idx", "timestep_hours"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "index" },
+            "start_idx": { "type": "integer", "minimum": 0 },
+            "end_idx": { "type": "integer", "minimum": 1 },
+            "timestep_hours": { "type": "number", "exclusiveMinimum": 0 }
+          }
+        },
+        {
+          "type": "object",
+          "description": "ISO-8601 date-range observation window.",
+          "required": ["type", "start", "end"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "date_range" },
+            "start": { "type": "string", "format": "date-time" },
+            "end": { "type": "string", "format": "date-time" }
+          }
+        },
+        { "type": "null" }
+      ],
+      "description": "The observation window over which the HTC was measured. In current h3 logic, type=index can auto-align analysis rows when no explicit CLI window is provided."
+    },
+    "method_profile": {
+      "oneOf": [
+        {
+          "type": "object",
+          "description": "Labels describing the measurement boundary conditions.",
+          "required": [
+            "method_family",
+            "heat_input_proxy",
+            "temperature_definition",
+            "storage_handling",
+            "ventilation_treatment",
+            "windowing",
+            "filters"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "method_family": { "type": "string" },
+            "heat_input_proxy": { "type": "string" },
+            "temperature_definition": { "type": "string" },
+            "storage_handling": { "type": "string" },
+            "ventilation_treatment": { "type": "string" },
+            "windowing": { "type": "string" },
+            "filters": { "type": "string" }
+          }
+        },
+        { "type": "null" }
+      ],
+      "description": "Method profile labelling boundary conditions for HTC comparison. Metadata only in current h3 calculations."
+    },
+    "conditions": {
+      "oneOf": [
+        {
+          "type": "object",
+          "description": "Conditions under which the measurement was taken.",
+          "required": ["occupancy_mode"],
+          "additionalProperties": false,
+          "properties": {
+            "occupancy_mode": {
+              "type": "string",
+              "enum": ["unoccupied_coheating", "occupied_normal_use", "other"],
+              "description": "Whether the dwelling was occupied during the measurement."
+            },
+            "notes": {
+              "type": ["string", "null"],
+              "description": "Free-text notes about conditions."
+            }
+          }
+        },
+        { "type": "null" }
+      ],
+      "description": "Measurement conditions (occupancy, etc.). Metadata only in current h3 calculations."
+    },
+    "source": {
+      "type": ["string", "null"],
+      "description": "Provenance label, e.g. 'SMETER', 'coheating_provider_X', 'synthetic'. Metadata only in current h3 calculations."
+    },
+    "notes": {
+      "type": ["string", "null"],
+      "description": "Free-text notes. Metadata only in current h3 calculations."
+    }
+  }
+}

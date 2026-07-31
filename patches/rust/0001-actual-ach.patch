@@ -1,0 +1,167 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: h3 <info@usevulcan.app>
+Date: Sat, 25 Jul 2026 14:04:35 +0100
+Subject: [PATCH 1/3] Add actual ACH reporting
+
+---
+ src/core/space_heat_demand/ventilation.rs | 50 +++++++++++++++++++++++
+ src/corpus.rs                             | 28 +++++++++----
+ 2 files changed, 71 insertions(+), 7 deletions(-)
+
+diff --git a/src/core/space_heat_demand/ventilation.rs b/src/core/space_heat_demand/ventilation.rs
+index 65a1d2a4..ea3938e9 100644
+--- a/src/core/space_heat_demand/ventilation.rs
++++ b/src/core/space_heat_demand/ventilation.rs
+@@ -2366,6 +2366,56 @@ impl InfiltrationVentilation {
+         Arc::clone(&self.detailed_results)
+     }
+ 
++    /// Record the air change rate actually applied for a timestep.
++    ///
++    /// Diagnostic only: this appends an `actual`-flagged row to the detailed
++    /// ventilation results and does not affect any calculation. It is gated on
++    /// `detailed_output_heating_cooling`, so it is inert unless detailed output
++    /// has been requested. Mass-flow columns are not meaningful for this row and
++    /// are reported as NaN.
++    pub(crate) fn record_ach_summary(
++        &self,
++        simtime: SimulationTimeIteration,
++        reporting_flag: ReportingFlag,
++        r_v_arg: f64,
++        total_volume: f64,
++        air_changes_per_hour: f64,
++        temp_interior_air: f64,
++    ) {
++        if !self.detailed_output_heating_cooling {
++            return;
++        }
++        let incoming_air_flow = air_changes_per_hour * total_volume;
++        let nan = f64::NAN;
++        self.detailed_results
++            .write()
++            .push(VentilationDetailedResult {
++                timestep_index: simtime.index,
++                reporting_flag,
++                r_v_arg,
++                incoming_air_flow,
++                total_volume,
++                air_changes_per_hour,
++                temp_interior_air,
++                p_z_ref: nan,
++                qm_in_through_window_opening: nan,
++                qm_out_through_window_opening: nan,
++                qm_in_through_vents: nan,
++                qm_out_through_vents: nan,
++                qm_in_through_leaks: nan,
++                qm_out_through_leaks: nan,
++                qm_in_through_comb: nan,
++                qm_out_through_comb: nan,
++                qm_in_through_passive_hybrid_ducts: nan,
++                qm_out_through_passive_hybrid_ducts: nan,
++                qm_sup_to_vent_zone: nan,
++                qm_eta_from_vent_zone: nan,
++                qm_in_effective_heat_recovery_saving_total: nan,
++                qm_in: nan,
++                qm_out: nan,
++            });
++    }
++
+     pub(crate) fn calc_air_changes_per_hour(
+         &self,
+         wind_speed: f64,
+diff --git a/src/corpus.rs b/src/corpus.rs
+index 87535fb7..df6700d8 100644
+--- a/src/corpus.rs
++++ b/src/corpus.rs
+@@ -1585,6 +1585,18 @@ impl Corpus {
+             ach_windows_shut
+         };
+ 
++        let ach_actual = ach_target;
++
++        // Record the actual ACH used (diagnostic only).
++        self.ventilation.record_ach_summary(
++            simtime,
++            ReportingFlag::Actual,
++            self.r_v_arg.load(Ordering::SeqCst),
++            self.total_volume,
++            ach_actual,
++            temp_int_air,
++        );
++
+         let mut gains_internal_zone: IndexMap<Arc<str>, f64> = Default::default();
+         let mut gains_solar_zone: IndexMap<Arc<str>, f64> = Default::default();
+         let mut h_name_list_sorted_zone: IndexMap<&str, Vec<Arc<str>>> = Default::default();
+@@ -1669,7 +1681,7 @@ impl Corpus {
+                 None,
+                 None,
+                 AirChangesPerHourArgument::TargetAndWindowsOpen {
+-                    ach_target,
++                    ach_target: ach_actual,
+                     ach_windows_open,
+                 },
+                 simtime,
+@@ -1688,9 +1700,9 @@ impl Corpus {
+         let ach_cooling = if is_heating_demand {
+             // Do not open windows any further than required for ventilation
+             // requirement if there is any heating demand in any zone
+-            ach_target
++            ach_actual
+         } else if is_cooling_demand {
+-            let ach_cooling = ach_target;
++            let ach_cooling = ach_actual;
+ 
+             // In this case, will need to recalculate space cooling demand for
+             // each zone, this time assuming no window opening for all zones
+@@ -1746,7 +1758,7 @@ impl Corpus {
+             // Do not reduce air change rate below ventilation requirement even
+             // if it would help with temperature regulation
+ 
+-            ach_cooling.max(ach_target)
++            ach_cooling.max(ach_actual)
+         };
+ 
+         // Calculate heating/cooling system response and temperature achieved in each zone
+@@ -1993,7 +2005,7 @@ impl Corpus {
+                 &hc_output_convective,
+                 &hc_output_radiative,
+                 ach_windows_open,
+-                ach_target,
++                ach_actual,
+                 avg_air_supply_temp,
+                 simtime,
+             )?;
+@@ -2106,7 +2118,7 @@ impl Corpus {
+         hc_output_convective: &IndexMap<Arc<str>, f64>,
+         hc_output_radiative: &IndexMap<Arc<str>, f64>,
+         ach_max: f64,
+-        ach_target: f64,
++        ach_actual: f64,
+         avg_air_supply_temp: f64,
+         simtime: SimulationTimeIteration,
+     ) -> anyhow::Result<()> {
+@@ -2204,7 +2216,7 @@ impl Corpus {
+                         None,
+                         None,
+                         AirChangesPerHourArgument::TargetAndWindowsOpen {
+-                            ach_target,
++                            ach_target: ach_actual,
+                             ach_windows_open: ach_max,
+                         },
+                         simtime,
+@@ -3469,6 +3481,7 @@ fn wwhr_system_from_details(
+ pub(crate) enum ReportingFlag {
+     Min,
+     Max,
++    Actual,
+ }
+ 
+ impl Display for ReportingFlag {
+@@ -3479,6 +3492,7 @@ impl Display for ReportingFlag {
+             match self {
+                 ReportingFlag::Min => "min",
+                 ReportingFlag::Max => "max",
++                ReportingFlag::Actual => "actual",
+             }
+         )
+     }

@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: h3 <info@usevulcan.app>
+Date: Sat, 25 Jul 2026 14:04:52 +0100
+Subject: [PATCH 2/3] Apply ACH calibration factor
+
+---
+ src/corpus.rs | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/src/corpus.rs b/src/corpus.rs
+index df6700d8..ffd9e9e8 100644
+--- a/src/corpus.rs
++++ b/src/corpus.rs
+@@ -1585,7 +1585,13 @@ impl Corpus {
+             ach_windows_shut
+         };
+ 
+-        let ach_actual = ach_target;
++        // h3 calibration hook. Absent `HEM_ACH_CAL_FACTOR` the factor is 1.0 and
++        // `ach_actual` is exactly `ach_target`, so this is inert by default.
++        let ach_calibration_factor = std::env::var("HEM_ACH_CAL_FACTOR")
++            .ok()
++            .and_then(|value| value.parse::<f64>().ok())
++            .unwrap_or(1.0);
++        let ach_actual = (ach_target * ach_calibration_factor).max(0.0);
+ 
+         // Record the actual ACH used (diagnostic only).
+         self.ventilation.record_ach_summary(

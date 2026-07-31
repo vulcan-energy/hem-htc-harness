@@ -1,0 +1,79 @@
+name: Bug report
+description: Something in h3 behaves incorrectly or crashes
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. A minimal reproducer beats a description every time.
+
+        **Please do not attach real, identifiable building data** — addresses,
+        occupier details, or client models you do not own. Anonymise or
+        synthesise first. Once it is in the issue tracker it is hard to remove.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you expect, and what did you get instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: command
+    attributes:
+      label: Command you ran
+      render: shell
+      placeholder: h3 run --input model.json --weather weather.epw
+    validations:
+      required: true
+
+  - type: textarea
+    id: output
+    attributes:
+      label: Output or traceback
+      render: text
+
+  - type: input
+    id: version
+    attributes:
+      label: h3 version or commit
+      placeholder: "0.1.0, or a commit SHA"
+    validations:
+      required: true
+
+  - type: input
+    id: hem-commit
+    attributes:
+      label: HEM engine commit
+      description: From `patches/manifest.json`, or the output of `h3 doctor`.
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - macOS
+        - Linux
+        - Windows
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproducer
+    attributes:
+      label: Reproducer
+      description: >
+        A minimal HEM input JSON that triggers the problem, if you can share one.
+        Synthetic or anonymised only.
+
+  - type: checkboxes
+    id: data-check
+    attributes:
+      label: Confirmation
+      options:
+        - label: >
+            Nothing I have attached contains real, identifiable building or
+            occupier data that I do not have permission to publish.
+          required: true

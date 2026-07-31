@@ -1,0 +1,31 @@
+#!/bin/sh
+# SPDX-License-Identifier: AGPL-3.0-only
+# SPDX-FileCopyrightText: 2026 Home Energy Foundry Limited
+#
+# Pre-push hook mirroring the CI job in .github/workflows/ci.yml.
+#
+# Opt in with:
+#     git config core.hooksPath scripts/hooks
+#
+# Resolves the interpreter rather than hardcoding `.venv/bin/python`, which does
+# not exist in a git worktree and made the previous hook fail there.
+
+set -e
+
+if [ -n "${VIRTUAL_ENV:-}" ] && [ -x "${VIRTUAL_ENV}/bin/python" ]; then
+    PY="${VIRTUAL_ENV}/bin/python"
+elif [ -x ".venv/bin/python" ]; then
+    PY=".venv/bin/python"
+elif command -v python3 >/dev/null 2>&1; then
+    PY="$(command -v python3)"
+else
+    echo "pre-push: no usable Python interpreter found" >&2
+    exit 1
+fi
+
+echo "pre-push: using ${PY}"
+
+"$PY" -m pytest
+"$PY" -m ruff check src tests scripts
+"$PY" -m ruff format --check src tests scripts
+"$PY" scripts/check_licensing.py

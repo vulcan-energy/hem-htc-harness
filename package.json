@@ -1,0 +1,14 @@
+{
+  "name": "htc-harness-browser-tests",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test:browser": "node --test tests/demo/runtime.test.mjs"
+  },
+  "devDependencies": {
+    "pyodide": "314.0.3"
+  }
+}

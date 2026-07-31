@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Project-generated artifacts
+.patch-workdir/
+output/
+site/
+tests/fixtures/full_runs/
+*.pdf
+
+# Browser-demo tooling
+node_modules/
+
+# Local tools and environment
+.claude/
+.direnv/
+.env
+.env.*
+!.env.example
+.DS_Store

@@ -1,0 +1,93 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: h3 <info@usevulcan.app>
+Date: Sat, 25 Jul 2026 14:13:34 +0100
+Subject: [PATCH] Add HEM_FHS_DISABLE_HEATING_SCHEDULE always-on heating
+ pattern
+
+---
+ .../future_homes_standard.rs                  | 65 ++++++++++++++++++-
+ 1 file changed, 64 insertions(+), 1 deletion(-)
+
+diff --git a/src/future_homes_standard/future_homes_standard.rs b/src/future_homes_standard/future_homes_standard.rs
+index daee7a6..475bf6b 100644
+--- a/src/future_homes_standard/future_homes_standard.rs
++++ b/src/future_homes_standard/future_homes_standard.rs
+@@ -97,7 +97,12 @@ pub(crate) fn final_preprocessing(
+     create_metabolic_gains(n_occupants, input)?;
+     create_space_heat_distribution(input)?;
+     create_water_heating_pattern(input)?;
+-    create_heating_pattern(input)?;
++    // h3 diagnostic hook. Inert unless HEM_FHS_DISABLE_HEATING_SCHEDULE is set.
++    if env_flag("HEM_FHS_DISABLE_HEATING_SCHEDULE") {
++        create_heating_pattern_always_on(input)?;
++    } else {
++        create_heating_pattern(input)?;
++    }
+     create_charging_pattern(input)?;
+     create_evaporative_losses(input, tfa, n_occupants, &EVAP_PROFILE_DATA)?;
+     create_cold_water_losses(input, tfa, n_occupants, &COLD_WATER_LOSS_PROFILE_DATA)?;
+@@ -1362,6 +1367,64 @@ fn create_heating_pattern(input: &mut InputForProcessing) -> anyhow::Result<()>
+     Ok(())
+ }
+ 
++/// Read a boolean environment flag.
++fn env_flag(name: &str) -> bool {
++    std::env::var(name)
++        .ok()
++        .map(|value| {
++            let value = value.trim().to_ascii_lowercase();
++            matches!(value.as_str(), "1" | "true" | "yes" | "on")
++        })
++        .unwrap_or(false)
++}
++
++/// Space heating held permanently at setpoint (h3 diagnostic mode).
++///
++/// Mirrors `create_heating_pattern`, but holds every zone at its FHS setpoint
++/// for all 48 half-hourly periods, with no setback and no advanced start. This
++/// exists so that an HTC estimate is not confounded by the FHS heating
++/// schedule cycling on and off.
++///
++/// Only reachable when `HEM_FHS_DISABLE_HEATING_SCHEDULE` is set, so it does not
++/// affect a default run.
++fn create_heating_pattern_always_on(input: &mut InputForProcessing) -> anyhow::Result<()> {
++    for zone_key in input.zone_keys()? {
++        let setpoint = calc_zone_setpoint_fhs(&json!(input.specific_zone(&zone_key)?))?;
++        input.set_init_temp_setpoint_for_zone(&zone_key, setpoint)?;
++
++        let space_heat_systems = input.space_heat_system_for_zone(&zone_key)?;
++        if space_heat_systems.is_empty() {
++            continue;
++        }
++
++        let always_on: Vec<Option<f64>> = vec![Some(setpoint); 48];
++
++        for space_heat_system in space_heat_systems {
++            let ctrlname = format!("HeatingPattern_{space_heat_system}");
++            input.set_control_string_for_space_heat_system(&space_heat_system, &ctrlname)?;
++            input.add_control(
++                &ctrlname,
++                json!({
++                    "type": "SetpointTimeControl",
++                    "start_day": 0,
++                    "time_series_step": 0.5,
++                    "schedule": {
++                        "main": [{"repeat": 53, "value": "week"}],
++                        "week": [
++                            {"repeat": 5, "value": "weekday"},
++                            {"repeat": 2, "value": "weekend"},
++                        ],
++                        "weekday": always_on.clone(),
++                        "weekend": always_on.clone(),
++                    },
++                }),
++            )?;
++        }
++    }
++
++    Ok(())
++}
++
+ /// Create charging control schedules for thermal storage systems.
+ ///
+ /// This includes:

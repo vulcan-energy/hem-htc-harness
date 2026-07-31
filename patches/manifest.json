@@ -1,0 +1,20 @@
+{
+  "rust": {
+    "repo_url": "https://github.com/communitiesuk/epb-home-energy-model",
+    "commit": "62d3df705690f33b3fc3e905c9971d4f3743bf2e",
+    "patches": [
+      "patches/rust/0001-actual-ach.patch",
+      "patches/rust/0002-ach-calibration.patch",
+      "patches/rust/0004-static-output-enhanced.patch"
+    ]
+  },
+  "fhs": {
+    "repo_url": "https://github.com/communitiesuk/epb-hem-wrapper-fhs",
+    "commit": "c5ba2673fbd886cfe4fb528f61b376bdf406ebbd",
+    "license_declaration_revision": "c22c467461fb971051b42e7fdd698bbfb03b7811",
+    "license_evidence_revision": "dd5ba73a19674d631da59b4924bb7dc2833fbb3b",
+    "patches": [
+      "patches/fhs/0001-disable-heating-schedule.patch"
+    ]
+  }
+}

@@ -1,0 +1,60 @@
+name: Methodology challenge
+description: You think the HTC estimate is wrong, biased, or a loss term is mis-attributed
+labels: ["methodology"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        h3 exists to be argued with. If you think the method is wrong, this is
+        the right place — please be as specific as you can.
+
+        Background: [methodology docs](https://usevulcan.app/h3/docs).
+
+        **Please do not attach real, identifiable building data.** Anonymise or
+        synthesise first.
+
+  - type: textarea
+    id: claim
+    attributes:
+      label: What you think is wrong
+      description: >
+        Which step of the method, and why. Reference the methodology docs where
+        you can.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you think it should do instead
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: >
+        A worked example, a measured comparison, a paper, or a derivation.
+        Anything that lets us check the claim rather than just discuss it.
+
+  - type: dropdown
+    id: measurement
+    attributes:
+      label: Is this backed by a physical measurement?
+      options:
+        - "No — this is an analytical or theoretical argument"
+        - "Yes — co-heating test"
+        - "Yes — SmartHTC"
+        - "Yes — Veritherm"
+        - "Yes — other measurement method"
+    validations:
+      required: true
+
+  - type: textarea
+    id: numbers
+    attributes:
+      label: Numbers
+      description: >
+        Modelled HTC, measured HTC, and what h3 reported, if applicable.
+      render: text

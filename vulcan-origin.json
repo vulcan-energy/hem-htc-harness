@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "component": "h3 (HEM HTC Harness)",
+  "part_of": "Vulcan Community",
+  "original_developer": "Home Energy Foundry Limited",
+  "company_number": "14972259",
+  "homepage": "https://usevulcan.app/open-source",
+  "license": "AGPL-3.0-only",
+  "additional_terms": "Vulcan-Origin-Terms-1.0",
+  "source": {
+    "repository": "https://github.com/vulcan-energy/hem-htc-harness",
+    "revision": "v0.1.0",
+    "archive": "https://github.com/vulcan-energy/hem-htc-harness/archive/refs/tags/v0.1.0.tar.gz"
+  },
+  "third_party": [
+    {
+      "component": "Home Energy Model engine",
+      "license": "MIT",
+      "license_text": "LICENSES/MIT-home-energy-model.txt",
+      "copyright": "Copyright (c) 2024 Crown Copyright (Ministry of Housing, Communities and Local Government)",
+      "source": "https://github.com/communitiesuk/epb-home-energy-model",
+      "revision_authority": "patches/manifest.json#rust.commit",
+      "revision": "62d3df705690f33b3fc3e905c9971d4f3743bf2e"
+    },
+    {
+      "component": "Home Energy Model Future Homes Standard wrapper",
+      "license": "MIT",
+      "license_text": "LICENSES/MIT-hem-wrapper-fhs.txt",
+      "copyright": "Crown Copyright (Ministry of Housing, Communities and Local Government)",
+      "source": "https://github.com/communitiesuk/epb-hem-wrapper-fhs",
+      "revision_authority": "patches/manifest.json#fhs.commit",
+      "revision": "c5ba2673fbd886cfe4fb528f61b376bdf406ebbd",
+      "license_declaration_revision": "c22c467461fb971051b42e7fdd698bbfb03b7811",
+      "license_evidence_revision": "dd5ba73a19674d631da59b4924bb7dc2833fbb3b"
+    }
+  ],
+  "official_build": false,
+  "contact": "info@usevulcan.app"
+}

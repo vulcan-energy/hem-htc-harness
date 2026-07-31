@@ -1,0 +1,61 @@
+h3 — HEM HTC Harness
+Part of Vulcan Community.
+
+Copyright © 2026 Home Energy Foundry Limited and contributors.
+
+h3 was originally developed by Home Energy Foundry Limited.
+Project origin: https://usevulcan.app/open-source
+
+AGPL-covered files that refer to the Vulcan Origin Terms are licensed under
+GNU AGPL version 3 only, supplemented by ADDITIONAL_TERMS.md. See LICENSE for
+the verbatim licence text and LICENSES/ for third-party licence texts.
+
+Corresponding Source for this version: https://github.com/vulcan-energy/hem-htc-harness/tree/v0.1.0
+
+Modified and unofficial builds must not imply affiliation with or endorsement by
+Home Energy Foundry Limited. See ATTRIBUTION.md and TRADEMARKS.md.
+
+
+THIRD-PARTY MATERIAL
+--------------------
+
+Home Energy Model engine
+  Copyright (c) 2024 Crown Copyright (Ministry of Housing, Communities and
+  Local Government). Licensed under the MIT Licence; see
+  LICENSES/MIT-home-energy-model.txt.
+  Source: https://github.com/communitiesuk/epb-home-energy-model
+  Pinned revision: see patches/manifest.json (authoritative).
+
+Home Energy Model London example weather year
+  Copyright (c) 2024 Crown Copyright (Ministry of Housing, Communities and
+  Local Government). Licensed under the MIT Licence; see
+  LICENSES/MIT-home-energy-model.txt.
+  Source: https://github.com/communitiesuk/epb-home-energy-model
+  Redistributed verbatim as src/htc_harness/sandbox/london.epw, from
+  examples/weather_data/London_weather_EnergyPlus_format.epw.
+
+Home Energy Model Future Homes Standard wrapper
+  Copyright (c) 2026 Crown Copyright (Ministry of Housing, Communities and
+  Local Government). Licensed under the MIT Licence; see
+  LICENSES/MIT-hem-wrapper-fhs.txt.
+  Source: https://github.com/communitiesuk/epb-hem-wrapper-fhs
+  Pinned revision: see patches/manifest.json (authoritative).
+  MIT declaration revision: c22c467461fb971051b42e7fdd698bbfb03b7811.
+  Canonical licence-file revision: dd5ba73a19674d631da59b4924bb7dc2833fbb3b.
+
+This distribution includes patches to the Home Energy Model engine under
+patches/. Those patches are Covered Vulcan Material and are AGPL-3.0-only. The
+engine source they apply to remains MIT. The patches are default-inert: with no
+h3 environment variables set they produce no change in simulation results.
+
+h3 is an independent tool that reads Home Energy Model output. It is not
+produced, endorsed or certified by the Ministry of Housing, Communities and
+Local Government or by any HEM governance body.
+
+
+RUNTIME DEPENDENCIES
+--------------------
+
+click     — BSD-3-Clause
+plotly    — MIT (optional; required for report generation)
+pyodide   — MPL-2.0 (browser demo only)

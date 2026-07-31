@@ -1,0 +1,1064 @@
+{
+  "PartGcompliance": true,
+  "NumberOfBedrooms": 2,
+  "NumberOfWetRooms": 3,
+  "HeatingControlType": "SeparateTempControl",
+  "metadata": {
+    "hem_core_version": "1.0.0a7"
+  },
+  "General": {
+    "build_type": "house",
+    "storeys_in_dwelling": 2
+  },
+  "PartO_active_cooling_required": false,
+  "ExternalConditions": {
+    "shading_segments": [
+      {
+        "start360": 0,
+        "end360": 10
+      },
+      {
+        "start360": 10,
+        "end360": 20
+      },
+      {
+        "start360": 20,
+        "end360": 30
+      },
+      {
+        "start360": 30,
+        "end360": 40
+      },
+      {
+        "start360": 40,
+        "end360": 50
+      },
+      {
+        "start360": 50,
+        "end360": 60
+      },
+      {
+        "start360": 60,
+        "end360": 70
+      },
+      {
+        "start360": 70,
+        "end360": 80
+      },
+      {
+        "start360": 80,
+        "end360": 90
+      },
+      {
+        "start360": 90,
+        "end360": 100
+      },
+      {
+        "start360": 100,
+        "end360": 110
+      },
+      {
+        "start360": 110,
+        "end360": 120
+      },
+      {
+        "start360": 120,
+        "end360": 130
+      },
+      {
+        "start360": 130,
+        "end360": 140
+      },
+      {
+        "start360": 140,
+        "end360": 150
+      },
+      {
+        "start360": 150,
+        "end360": 160
+      },
+      {
+        "start360": 160,
+        "end360": 170
+      },
+      {
+        "start360": 170,
+        "end360": 180
+      },
+      {
+        "start360": 180,
+        "end360": 190
+      },
+      {
+        "start360": 190,
+        "end360": 200
+      },
+      {
+        "start360": 200,
+        "end360": 210
+      },
+      {
+        "start360": 210,
+        "end360": 220
+      },
+      {
+        "start360": 220,
+        "end360": 230
+      },
+      {
+        "start360": 230,
+        "end360": 240
+      },
+      {
+        "start360": 240,
+        "end360": 250
+      },
+      {
+        "start360": 250,
+        "end360": 260
+      },
+      {
+        "start360": 260,
+        "end360": 270
+      },
+      {
+        "start360": 270,
+        "end360": 280
+      },
+      {
+        "start360": 280,
+        "end360": 290
+      },
+      {
+        "start360": 290,
+        "end360": 300
+      },
+      {
+        "start360": 300,
+        "end360": 310
+      },
+      {
+        "start360": 310,
+        "end360": 320
+      },
+      {
+        "start360": 320,
+        "end360": 330
+      },
+      {
+        "start360": 330,
+        "end360": 340
+      },
+      {
+        "start360": 340,
+        "end360": 350
+      },
+      {
+        "start360": 350,
+        "end360": 360
+      }
+    ]
+  },
+  "KitchenExtractorHoodExternal": true,
+  "Appliances": {
+    "Hobs": "Default",
+    "Dishwasher": "Default",
+    "Fridge-Freezer": "Default"
+  },
+  "ColdWaterSource": {
+    "mains water": {}
+  },
+  "EnergySupply": {
+    "mains elec": {
+      "fuel": "electricity",
+      "is_export_capable": true
+    }
+  },
+  "NumberOfSanitaryAccommodations": 1,
+  "Zone": {
+    "Zone 1": {
+      "Lighting": {
+        "bulbs": [
+          {
+            "count": 1,
+            "power": 10,
+            "efficacy": 80
+          },
+          {
+            "count": 1,
+            "power": 10,
+            "efficacy": 80
+          },
+          {
+            "count": 1,
+            "power": 10,
+            "efficacy": 80
+          },
+          {
+            "count": 1,
+            "power": 10,
+            "efficacy": 80
+          },
+          {
+            "count": 1,
+            "power": 10,
+            "efficacy": 80
+          },
+          {
+            "count": 1,
+            "power": 10,
+            "efficacy": 80
+          },
+          {
+            "count": 1,
+            "power": 10,
+            "efficacy": 80
+          },
+          {
+            "count": 1,
+            "power": 10,
+            "efficacy": 80
+          }
+        ]
+      },
+      "ThermalBridging": 26.04200000000001,
+      "volume": 199.36,
+      "BuildingElement": {
+        "Wall (S)": {
+          "type": "BuildingElementOpaque",
+          "colour": "Intermediate",
+          "u_value": 0.18,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "IE: Mass divided over internal and external side",
+          "pitch": 90,
+          "orientation360": 180,
+          "base_height": 0,
+          "height": 2.8,
+          "width": 4,
+          "area": 7.39,
+          "is_external_door": false,
+          "is_unheated_pitched_roof": false
+        },
+        "Wall (N)": {
+          "type": "BuildingElementOpaque",
+          "colour": "Intermediate",
+          "u_value": 0.18,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "IE: Mass divided over internal and external side",
+          "pitch": 90,
+          "orientation360": 0,
+          "base_height": 0,
+          "height": 2.8,
+          "width": 4,
+          "area": 8.09,
+          "is_unheated_pitched_roof": false,
+          "is_external_door": false
+        },
+        "Wall (W)": {
+          "type": "BuildingElementOpaque",
+          "colour": "Intermediate",
+          "u_value": 0.18,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "IE: Mass divided over internal and external side",
+          "pitch": 90,
+          "orientation360": 270,
+          "base_height": 0,
+          "height": 2.8,
+          "width": 8.9,
+          "area": 24.92,
+          "is_external_door": false,
+          "is_unheated_pitched_roof": false
+        },
+        "Door": {
+          "type": "BuildingElementOpaque",
+          "is_external_door": true,
+          "colour": "Intermediate",
+          "u_value": 1,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "IE: Mass divided over internal and external side",
+          "pitch": 90,
+          "orientation360": 180,
+          "base_height": 0,
+          "height": 2.1,
+          "width": 1.05,
+          "area": 2.2,
+          "is_unheated_pitched_roof": false
+        },
+        "Door 1": {
+          "type": "BuildingElementOpaque",
+          "is_external_door": true,
+          "colour": "Intermediate",
+          "u_value": 1,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "IE: Mass divided over internal and external side",
+          "pitch": 90,
+          "orientation360": 0,
+          "base_height": 0,
+          "height": 2.1,
+          "width": 1.05,
+          "area": 2.21,
+          "is_unheated_pitched_roof": false
+        },
+        "Wall (S) 1": {
+          "type": "BuildingElementOpaque",
+          "colour": "Intermediate",
+          "u_value": 0.18,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "IE: Mass divided over internal and external side",
+          "pitch": 90,
+          "orientation360": 180,
+          "base_height": 2.8,
+          "height": 2.8,
+          "width": 4,
+          "area": 9.09,
+          "is_unheated_pitched_roof": false,
+          "is_external_door": false
+        },
+        "Wall (N) 1": {
+          "type": "BuildingElementOpaque",
+          "colour": "Intermediate",
+          "u_value": 0.18,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "IE: Mass divided over internal and external side",
+          "pitch": 90,
+          "orientation360": 0,
+          "base_height": 2.8,
+          "height": 2.8,
+          "width": 4,
+          "area": 9.21,
+          "is_external_door": false,
+          "is_unheated_pitched_roof": false
+        },
+        "Wall (W) 1": {
+          "type": "BuildingElementOpaque",
+          "colour": "Intermediate",
+          "u_value": 0.18,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "IE: Mass divided over internal and external side",
+          "pitch": 90,
+          "orientation360": 270,
+          "base_height": 2.8,
+          "height": 2.8,
+          "width": 8.9,
+          "area": 24.43,
+          "is_unheated_pitched_roof": false,
+          "is_external_door": false
+        },
+        "Pitched Roof (S)": {
+          "type": "BuildingElementOpaque",
+          "is_unheated_pitched_roof": true,
+          "colour": "Intermediate",
+          "u_value": 0.19,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "IE: Mass divided over internal and external side",
+          "pitch": 40,
+          "orientation360": 180,
+          "base_height": 5.6,
+          "height": 5.81,
+          "width": 3.99,
+          "area": 17.78,
+          "is_external_door": false
+        },
+        "Pitched Roof (N)": {
+          "type": "BuildingElementOpaque",
+          "is_unheated_pitched_roof": true,
+          "colour": "Intermediate",
+          "u_value": 0.19,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "IE: Mass divided over internal and external side",
+          "pitch": 40,
+          "orientation360": 0,
+          "base_height": 5.6,
+          "height": 5.81,
+          "width": 4,
+          "area": 17.79,
+          "is_external_door": false
+        },
+        "Window": {
+          "type": "BuildingElementTransparent",
+          "u_value": 1.2,
+          "pitch": 90,
+          "orientation360": 180,
+          "g_value": 0.75,
+          "frame_area_fraction": 0.25,
+          "base_height": 1,
+          "height": 1.3,
+          "width": 1.24,
+          "free_area_height": 0.95,
+          "mid_height": 1.65,
+          "max_window_open_area": 0.8,
+          "security_risk": true,
+          "shading": [
+            {
+              "type": "overhang",
+              "depth": 0.1,
+              "distance": 0.1
+            },
+            {
+              "type": "sidefinleft",
+              "depth": 0.1,
+              "distance": 0.1
+            },
+            {
+              "type": "sidefinright",
+              "depth": 0.1,
+              "distance": 0.1
+            }
+          ],
+          "window_part_list": [
+            {
+              "mid_height_air_flow_path": 1.5
+            }
+          ]
+        },
+        "Window 1": {
+          "type": "BuildingElementTransparent",
+          "u_value": 1.2,
+          "pitch": 90,
+          "orientation360": 0,
+          "g_value": 0.75,
+          "frame_area_fraction": 0.1,
+          "base_height": 1,
+          "height": 1,
+          "width": 0.9,
+          "free_area_height": 0.95,
+          "mid_height": 1.5,
+          "max_window_open_area": 0.86,
+          "security_risk": true,
+          "shading": [
+            {
+              "type": "overhang",
+              "depth": 0.1,
+              "distance": 0.1
+            },
+            {
+              "type": "sidefinleft",
+              "depth": 0.1,
+              "distance": 0.1
+            },
+            {
+              "type": "sidefinright",
+              "depth": 0.1,
+              "distance": 0.1
+            }
+          ],
+          "window_part_list": [
+            {
+              "mid_height_air_flow_path": 1.5
+            }
+          ]
+        },
+        "Window 2": {
+          "type": "BuildingElementTransparent",
+          "u_value": 1.2,
+          "pitch": 90,
+          "orientation360": 180,
+          "g_value": 0.75,
+          "frame_area_fraction": 0.1,
+          "base_height": 3.8,
+          "height": 1.1,
+          "width": 0.68,
+          "free_area_height": 0.95,
+          "mid_height": 4.35,
+          "max_window_open_area": 0.7,
+          "security_risk": false,
+          "shading": [
+            {
+              "type": "overhang",
+              "depth": 0.1,
+              "distance": 0.1
+            },
+            {
+              "type": "sidefinleft",
+              "depth": 0.1,
+              "distance": 0.1
+            },
+            {
+              "type": "sidefinright",
+              "depth": 0.1,
+              "distance": 0.1
+            }
+          ],
+          "window_part_list": [
+            {
+              "mid_height_air_flow_path": 3.8
+            }
+          ]
+        },
+        "Window 1 1": {
+          "type": "BuildingElementTransparent",
+          "u_value": 1.2,
+          "pitch": 90,
+          "orientation360": 0,
+          "g_value": 0.75,
+          "frame_area_fraction": 0.25,
+          "base_height": 3.8,
+          "height": 1.1,
+          "width": 1.81,
+          "free_area_height": 0.95,
+          "mid_height": 4.35,
+          "max_window_open_area": 1.2,
+          "security_risk": false,
+          "shading": [
+            {
+              "type": "overhang",
+              "depth": 0.1,
+              "distance": 0.1
+            },
+            {
+              "type": "sidefinleft",
+              "depth": 0.1,
+              "distance": 0.1
+            },
+            {
+              "type": "sidefinright",
+              "depth": 0.1,
+              "distance": 0.1
+            }
+          ],
+          "window_part_list": [
+            {
+              "mid_height_air_flow_path": 4.35
+            },
+            {
+              "mid_height_air_flow_path": 4.35
+            }
+          ]
+        },
+        "Window 2 1": {
+          "type": "BuildingElementTransparent",
+          "u_value": 1.2,
+          "pitch": 90,
+          "orientation360": 270,
+          "g_value": 0.75,
+          "frame_area_fraction": 0.1,
+          "base_height": 3.8,
+          "height": 1.1,
+          "width": 0.45,
+          "free_area_height": 0.95,
+          "mid_height": 4.35,
+          "max_window_open_area": 0.43,
+          "security_risk": false,
+          "shading": [
+            {
+              "type": "overhang",
+              "depth": 0.1,
+              "distance": 0.1
+            },
+            {
+              "type": "sidefinleft",
+              "depth": 0.1,
+              "distance": 0.1
+            },
+            {
+              "type": "sidefinright",
+              "depth": 0.1,
+              "distance": 0.1
+            }
+          ],
+          "window_part_list": [
+            {
+              "mid_height_air_flow_path": 3.8
+            }
+          ]
+        },
+        "Window 2 2": {
+          "type": "BuildingElementTransparent",
+          "u_value": 1.2,
+          "pitch": 90,
+          "orientation360": 180,
+          "g_value": 0.75,
+          "frame_area_fraction": 0.1,
+          "base_height": 3.8,
+          "height": 1.1,
+          "width": 1.24,
+          "free_area_height": 0.95,
+          "mid_height": 4.35,
+          "max_window_open_area": 0.65,
+          "security_risk": false,
+          "shading": [
+            {
+              "type": "overhang",
+              "depth": 0.1,
+              "distance": 0.1
+            },
+            {
+              "type": "sidefinleft",
+              "depth": 0.1,
+              "distance": 0.1
+            },
+            {
+              "type": "sidefinright",
+              "depth": 0.1,
+              "distance": 0.1
+            }
+          ],
+          "window_part_list": [
+            {
+              "mid_height_air_flow_path": 3.8
+            }
+          ]
+        },
+        "Floor": {
+          "type": "BuildingElementGround",
+          "total_area": 30,
+          "area": 35.6,
+          "u_value": 0.13,
+          "thermal_resistance_floor_construction": 6.12,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "D: Mass equally distributed",
+          "floor_type": "Slab_no_edge_insulation",
+          "thickness_walls": 0.2,
+          "perimeter": 16.9,
+          "psi_wall_floor_junc": 0.16
+        },
+        "Party Wall (E)": {
+          "type": "BuildingElementPartyWall",
+          "area": 24.92,
+          "pitch": 90,
+          "u_value": 0.15,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "D: Mass equally distributed",
+          "party_wall_cavity_type": "solid"
+        },
+        "Internal Wall (S)": {
+          "type": "BuildingElementAdjacentConditionedSpace",
+          "area": 22.37,
+          "pitch": 90,
+          "u_value": 0.15,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "I: Mass concentrated at internal side"
+        },
+        "Internal Wall (E)": {
+          "type": "BuildingElementAdjacentConditionedSpace",
+          "area": 7.25,
+          "pitch": 0,
+          "u_value": 0.15,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "I: Mass concentrated at internal side"
+        },
+        "Internal Wall (N)": {
+          "type": "BuildingElementAdjacentConditionedSpace",
+          "area": 3.75,
+          "pitch": 0,
+          "u_value": 0.15,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "I: Mass concentrated at internal side"
+        },
+        "Internal Wall (E) 1": {
+          "type": "BuildingElementAdjacentConditionedSpace",
+          "area": 17.23,
+          "pitch": 0,
+          "u_value": 0.15,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "I: Mass concentrated at internal side"
+        },
+        "Internal Wall (N) 1": {
+          "type": "BuildingElementAdjacentConditionedSpace",
+          "area": 8.27,
+          "pitch": 0,
+          "u_value": 0.15,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "I: Mass concentrated at internal side"
+        },
+        "Internal Wall (W)": {
+          "type": "BuildingElementAdjacentConditionedSpace",
+          "area": 7.31,
+          "pitch": 90,
+          "u_value": 0.15,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "I: Mass concentrated at internal side"
+        },
+        "Party Wall (E) 1": {
+          "type": "BuildingElementPartyWall",
+          "area": 24.92,
+          "pitch": 90,
+          "u_value": 0.15,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "D: Mass equally distributed",
+          "party_wall_cavity_type": "solid"
+        },
+        "Internal Ceiling": {
+          "type": "BuildingElementAdjacentConditionedSpace",
+          "area": 71.2,
+          "pitch": 180,
+          "u_value": 0.15,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "I: Mass concentrated at internal side"
+        },
+        "Internal Wall (S) 1": {
+          "type": "BuildingElementAdjacentConditionedSpace",
+          "area": 17.75,
+          "pitch": 90,
+          "u_value": 0.15,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "I: Mass concentrated at internal side"
+        },
+        "Internal Wall (N) 2": {
+          "type": "BuildingElementAdjacentConditionedSpace",
+          "area": 22.13,
+          "pitch": 90,
+          "u_value": 0.15,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "I: Mass concentrated at internal side"
+        },
+        "Internal Wall (S) 2": {
+          "type": "BuildingElementAdjacentConditionedSpace",
+          "area": 4.48,
+          "pitch": 90,
+          "u_value": 0.15,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "I: Mass concentrated at internal side"
+        },
+        "Internal Wall (W) 1": {
+          "type": "BuildingElementAdjacentConditionedSpace",
+          "area": 16.35,
+          "pitch": 90,
+          "u_value": 0.15,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "I: Mass concentrated at internal side"
+        },
+        "Internal Wall (N) 3": {
+          "type": "BuildingElementAdjacentConditionedSpace",
+          "area": 4.82,
+          "pitch": 90,
+          "u_value": 0.15,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "I: Mass concentrated at internal side"
+        },
+        "Internal Wall (W) 2": {
+          "type": "BuildingElementAdjacentConditionedSpace",
+          "area": 13.78,
+          "pitch": 90,
+          "u_value": 0.15,
+          "areal_heat_capacity": "Medium",
+          "mass_distribution_class": "I: Mass concentrated at internal side"
+        }
+      },
+      "livingroom_area": 12.86,
+      "restofdwelling_area": 58.34,
+      "SpaceHeatSystem": "Zone 1 circuit"
+    }
+  },
+  "HotWaterDemand": {
+    "Shower": {
+      "mixer": {
+        "type": "MixerShower",
+        "flowrate": 8,
+        "allow_low_flowrate": false,
+        "ColdWaterSource": "mains water"
+      }
+    },
+    "Bath": {
+      "Bath": {
+        "size": 100,
+        "ColdWaterSource": "mains water"
+      }
+    },
+    "Other": {
+      "Tap": {
+        "flowrate": 6,
+        "ColdWaterSource": "mains water"
+      },
+      "Tap 1": {
+        "flowrate": 6,
+        "ColdWaterSource": "mains water"
+      },
+      "Tap 2": {
+        "flowrate": 6,
+        "ColdWaterSource": "mains water"
+      }
+    }
+  },
+  "Events": {},
+  "SpaceHeatSystem": {
+    "Zone 1 circuit": {
+      "type": "WetDistribution",
+      "Zone": "Zone 1",
+      "emitters": [
+        {
+          "wet_emitter_type": "ufh",
+          "emitter_floor_area": 8.89,
+          "equivalent_specific_thermal_mass": 95,
+          "system_performance_factor": 4.8,
+          "frac_convective": 0.45
+        },
+        {
+          "wet_emitter_type": "ufh",
+          "emitter_floor_area": 7.62,
+          "equivalent_specific_thermal_mass": 95,
+          "system_performance_factor": 4.8,
+          "frac_convective": 0.45
+        },
+        {
+          "wet_emitter_type": "radiator",
+          "c_per_m": 0.0112,
+          "length": 1.44,
+          "n": 1.2,
+          "frac_convective": 0.92,
+          "thermal_mass_per_m": 0.019
+        },
+        {
+          "wet_emitter_type": "radiator",
+          "c_per_m": 0.0112,
+          "length": 1.44,
+          "n": 1.2,
+          "frac_convective": 0.92,
+          "thermal_mass_per_m": 0.019
+        },
+        {
+          "wet_emitter_type": "radiator",
+          "c_per_m": 0.0112,
+          "length": 0.58,
+          "n": 1.2,
+          "frac_convective": 0.92,
+          "thermal_mass_per_m": 0.019
+        }
+      ],
+      "temp_diff_emit_dsgn": 10,
+      "variable_flow": true,
+      "min_flow_rate": 3,
+      "max_flow_rate": 18,
+      "HeatSource": {
+        "name": "hp",
+        "temp_flow_limit_upper": 65
+      },
+      "ecodesign_controller": {
+        "ecodesign_control_class": 2,
+        "min_outdoor_temp": -4,
+        "max_outdoor_temp": 20,
+        "min_flow_temp": 30
+      },
+      "design_flow_temp": 55,
+      "thermal_mass": 0.14
+    }
+  },
+  "InfiltrationVentilation": {
+    "shield_class": "Normal",
+    "terrain_class": "Suburban",
+    "altitude": 30,
+    "noise_nuisance": false,
+    "Vents": {
+      "Background Vent 1": {
+        "mid_height_air_flow_path": 1.5,
+        "area_cm2": 225,
+        "orientation360": 180,
+        "pitch": 90
+      },
+      "Background Vent 2": {
+        "mid_height_air_flow_path": 1.5,
+        "area_cm2": 225,
+        "orientation360": 0,
+        "pitch": 90
+      },
+      "Background Vent 3": {
+        "mid_height_air_flow_path": 3.8,
+        "area_cm2": 225,
+        "orientation360": 180,
+        "pitch": 90
+      },
+      "Background Vent 4": {
+        "mid_height_air_flow_path": 4.35,
+        "area_cm2": 225,
+        "orientation360": 0,
+        "pitch": 90
+      },
+      "Background Vent 5": {
+        "mid_height_air_flow_path": 3.8,
+        "area_cm2": 225,
+        "orientation360": 270,
+        "pitch": 90
+      },
+      "Background Vent 6": {
+        "mid_height_air_flow_path": 3.8,
+        "area_cm2": 225,
+        "orientation360": 180,
+        "pitch": 90
+      }
+    },
+    "Leaks": {
+      "ventilation_zone_height": 5.6,
+      "test_pressure": "Standard",
+      "test_result": 4,
+      "env_area": 215.65000000000003
+    },
+    "MechanicalVentilation": {
+      "Centralised Continuous MEV": {
+        "design_zone_cooling_covered_by_mech_vent": 3.4,
+        "design_zone_heating_covered_by_mech_vent": 1,
+        "vent_type": "Centralised continuous MEV",
+        "EnergySupply": "mains elec",
+        "design_outdoor_air_flow_rate": 120,
+        "measured_fan_power": 44.16,
+        "measured_air_flow_rate": 120,
+        "mid_height_air_flow_path": 2.7,
+        "orientation360": 0,
+        "pitch": 180
+      }
+    },
+    "ventilation_zone_base_height": 0
+  },
+  "HeatSourceWet": {
+    "hp": {
+      "EnergySupply": "mains elec",
+      "backup_ctrl_type": "TopUp",
+      "min_modulation_rate_35": 0.43166666667,
+      "min_modulation_rate_55": 0.64640883978,
+      "min_temp_diff_flow_return_for_hp_to_operate": 0,
+      "modulating_control": true,
+      "power_crankcase_heater": 0.01,
+      "power_heating_circ_pump": 0.015,
+      "power_off": 0.007,
+      "power_source_circ_pump": 0.01,
+      "power_standby": 0.008,
+      "sink_type": "Water",
+      "source_type": "OutsideAir",
+      "temp_lower_operating_limit": -15,
+      "temp_return_feed_max": 70,
+      "test_data_EN14825": [
+        {
+          "capacity": 7.08,
+          "cop": 2.69,
+          "design_flow_temp": 35,
+          "temp_outlet": 34,
+          "temp_source": -7,
+          "temp_test": -7,
+          "test_letter": "A"
+        },
+        {
+          "capacity": 5.85,
+          "cop": 4.24,
+          "design_flow_temp": 35,
+          "temp_outlet": 30,
+          "temp_source": 2,
+          "temp_test": 2,
+          "test_letter": "B"
+        },
+        {
+          "capacity": 3.885,
+          "cop": 5.75,
+          "design_flow_temp": 35,
+          "temp_outlet": 27,
+          "temp_source": 7,
+          "temp_test": 7,
+          "test_letter": "C"
+        },
+        {
+          "capacity": 3.915,
+          "cop": 7.27,
+          "design_flow_temp": 35,
+          "temp_outlet": 24,
+          "temp_source": 12,
+          "temp_test": 12,
+          "test_letter": "D"
+        },
+        {
+          "capacity": 7.050000000000001,
+          "cop": 2.29,
+          "design_flow_temp": 35,
+          "temp_outlet": 35,
+          "temp_source": -10,
+          "temp_test": -10,
+          "test_letter": "F"
+        },
+        {
+          "capacity": 6.75,
+          "cop": 2.02,
+          "design_flow_temp": 55,
+          "temp_outlet": 52,
+          "temp_source": -7,
+          "temp_test": -7,
+          "test_letter": "A"
+        },
+        {
+          "capacity": 6.645,
+          "cop": 3.17,
+          "design_flow_temp": 55,
+          "temp_outlet": 42,
+          "temp_source": 3,
+          "temp_test": 2,
+          "test_letter": "B"
+        },
+        {
+          "capacity": 5.265,
+          "cop": 4.2,
+          "design_flow_temp": 55,
+          "temp_outlet": 36,
+          "temp_source": 7,
+          "temp_test": 7,
+          "test_letter": "C"
+        },
+        {
+          "capacity": 4.92,
+          "cop": 5.82,
+          "design_flow_temp": 55,
+          "temp_outlet": 30,
+          "temp_source": 12,
+          "temp_test": 12,
+          "test_letter": "D"
+        },
+        {
+          "capacity": 6.93,
+          "cop": 1.74,
+          "design_flow_temp": 55,
+          "temp_outlet": 55,
+          "temp_source": -10,
+          "temp_test": -10,
+          "test_letter": "F"
+        }
+      ],
+      "time_constant_onoff_operation": 140,
+      "power_max_backup": 5,
+      "type": "HeatPump",
+      "var_flow_temp_ctrl_during_test": true,
+      "is_heat_network": false
+    }
+  },
+  "HotWaterSource": {
+    "hw cylinder": {
+      "type": "StorageTank",
+      "volume": 80,
+      "daily_losses": 1.68,
+      "init_temp": 55,
+      "ColdWaterSource": "mains water",
+      "HeatSource": {
+        "hp": {
+          "type": "HeatSourceWet",
+          "name": "hp",
+          "temp_flow_limit_upper": 65,
+          "heater_position": 0.1,
+          "thermostat_position": 0.33
+        }
+      },
+      "primary_pipework": [
+        {
+          "location": "internal",
+          "internal_diameter_mm": 31,
+          "external_diameter_mm": 33,
+          "length": 5.08,
+          "insulation_thermal_conductivity": 0.033,
+          "insulation_thickness_mm": 36,
+          "surface_reflectivity": false,
+          "pipe_contents": "water"
+        },
+        {
+          "location": "external",
+          "internal_diameter_mm": 31,
+          "external_diameter_mm": 33,
+          "length": 1.04,
+          "insulation_thermal_conductivity": 0.033,
+          "insulation_thickness_mm": 36,
+          "surface_reflectivity": false,
+          "pipe_contents": "water"
+        }
+      ]
+    }
+  },
+  "GroundFloorArea": 35.6,
+  "BuildingLength": 8.9,
+  "BuildingWidth": 4,
+  "NumberOfHabitableRooms": 3,
+  "NumberOfHotTappedRooms": 2,
+  "NumberOfUtilityRooms": 0,
+  "NumberOfBathrooms": 1
+}

@@ -1,0 +1,87 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install ".[dev,docs,plot]"
+      - name: Tests
+        run: |
+          python -m pytest
+      - name: Ruff
+        run: |
+          python -m ruff check src tests scripts
+          python -m ruff format --check src tests scripts
+      - name: Licensing and attribution gate
+        run: |
+          python scripts/check_licensing.py --release
+      - name: Identifiable-data sweep
+        run: |
+          python scripts/check_no_identifiable_data.py
+      - name: Browser demo runtime (Pyodide)
+        run: |
+          python -m pip install build
+          python -m build --wheel --outdir dist .
+          npm ci
+          npm run test:browser
+      - name: Publish the demo bundle
+        # The wheel and the two glue files are everything the host page needs;
+        # the WebAssembly engine it calls is already served from the site.
+        #
+        # Published rather than committed into the site. A committed wheel that
+        # drifts is not a stale asset, it is silently wrong code — the page
+        # would report HTC from transforms that no longer match the ones the
+        # command line runs, which is the single failure this architecture
+        # exists to prevent. A pinned fetch of a missing or moved artifact fails
+        # loudly instead.
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          mkdir -p demo-bundle
+          cp dist/*.whl demo-bundle/
+          cp demo/worker.js demo/h3-runtime.js demo-bundle/
+          python - <<'PY'
+          import glob, hashlib, json, os, pathlib
+          wheel = pathlib.Path(glob.glob("demo-bundle/*.whl")[0])
+          manifest = {
+              "wheel": wheel.name,
+              "wheel_sha256": hashlib.sha256(wheel.read_bytes()).hexdigest(),
+              "commit": os.environ["GITHUB_SHA"],
+              # The host page asserts this export exists before running, so a
+              # site-side engine rebuilt from a different pin fails with a clear
+              # message rather than a stack trace.
+              "requires_engine_export": "run_hem_for_h3",
+              "engine_export_arity": 5,
+          }
+          pathlib.Path("demo-bundle/h3-demo.json").write_text(
+              json.dumps(manifest, indent=2) + "\n"
+          )
+          PY
+      - name: Upload the demo bundle
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: h3-demo-bundle
+          path: demo-bundle/
+          retention-days: 90
+
+      - name: Docs
+        run: |
+          python -m mkdocs build --strict

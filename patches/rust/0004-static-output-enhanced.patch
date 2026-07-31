@@ -1,0 +1,285 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: h3 <info@usevulcan.app>
+Date: Sat, 25 Jul 2026 14:09:31 +0100
+Subject: [PATCH 3/3] Enhance static output with fabric/bridge/vent breakdown
+ and ACH
+
+---
+ src/corpus.rs | 110 ++++++++++++++++++++++++++++++++++++++------------
+ src/lib.rs    |  28 +++++++++++++
+ src/output.rs |  10 +++++
+ 3 files changed, 123 insertions(+), 25 deletions(-)
+
+diff --git a/src/corpus.rs b/src/corpus.rs
+index ffd9e9e8..5615fdef 100644
+--- a/src/corpus.rs
++++ b/src/corpus.rs
+@@ -526,7 +526,8 @@ pub fn calc_htc_hlp<T: InputForCalcHtcHlp>(input: &T) -> anyhow::Result<HtcHlpCa
+         &controls,
+     )?;
+ 
+-    fn calc_heat_loss(data: &BuildingElementInput) -> anyhow::Result<f64> {
++    /// Returns (element_type, heat_loss_w_per_k).
++    fn calc_heat_loss(data: &BuildingElementInput) -> anyhow::Result<(&'static str, f64)> {
+         // Calculate thermal_resistance_construction from u_value if only the latter has been provided
+         let thermal_resistance_construction = init_resistance_or_uvalue(data)?;
+         let r_si = match data.pitch() {
+@@ -540,20 +541,20 @@ pub fn calc_htc_hlp<T: InputForCalcHtcHlp>(input: &T) -> anyhow::Result<HtcHlpCa
+         Ok(match data {
+             BuildingElementInput::Opaque { area_input, .. } => {
+                 let u_value = 1.0 / (thermal_resistance_construction + r_se + r_si);
+-                area_input.area() * u_value
++                ("Opaque", area_input.area() * u_value)
+             }
+             BuildingElementInput::Transparent { area_input, .. } => {
+                 let r_curtains_blinds = 0.04;
+                 let u_value =
+                     1.0 / (thermal_resistance_construction + r_se + r_si + r_curtains_blinds);
+                 let area = area_input.area();
+-                area * u_value
++                ("Transparent", area * u_value)
+             }
+-            BuildingElementInput::Ground { area, u_value, .. } => *area * *u_value,
+-            BuildingElementInput::AdjacentConditionedSpace { .. } => 0.,
++            BuildingElementInput::Ground { area, u_value, .. } => ("Ground", *area * *u_value),
++            BuildingElementInput::AdjacentConditionedSpace { .. } => ("AdjacentConditioned", 0.),
+             BuildingElementInput::AdjacentUnconditionedSpace { area, .. } => {
+                 let u_value = 1.0 / (thermal_resistance_construction + r_se + r_si);
+-                area * u_value
++                ("AdjacentUnconditioned", area * u_value)
+             }
+             BuildingElementInput::PartyWall {
+                 area,
+@@ -567,7 +568,7 @@ pub fn calc_htc_hlp<T: InputForCalcHtcHlp>(input: &T) -> anyhow::Result<HtcHlpCa
+                     party_wall_cavity_data.thermal_resistance_cavity(),
+                 )?;
+                 let u_value = 1.0 / (thermal_resistance_construction + r_se + r_si);
+-                area * u_value
++                ("PartyWall", area * u_value)
+             }
+         })
+     }
+@@ -594,7 +595,17 @@ pub fn calc_htc_hlp<T: InputForCalcHtcHlp>(input: &T) -> anyhow::Result<HtcHlpCa
+         }
+     }
+ 
+-    let calc_htc = |zone: &ZoneInput| -> anyhow::Result<(f64, f64, f64)> {
++    /// Per-zone HTC result including per-element fabric breakdown and static ACH.
++    struct ZoneHtcResult {
++        total_fabric_heat_loss: f64,
++        thermal_bridges: f64,
++        vent_heat_loss: f64,
++        air_changes_per_hour: f64,
++        /// (element_name, element_type, heat_loss_w_per_k)
++        fabric_elements: Vec<(String, String, f64)>,
++    }
++
++    let calc_htc = |zone: &ZoneInput| -> anyhow::Result<ZoneHtcResult> {
+         let wind_speed = external_conditions.wind_speed_annual()?;
+         let wind_direction = external_conditions.wind_direction_annual()?;
+         let temp_int_air = input.temp_internal_air_static_calcs();
+@@ -632,25 +643,30 @@ pub fn calc_htc_hlp<T: InputForCalcHtcHlp>(input: &T) -> anyhow::Result<HtcHlpCa
+             true.into(),
+             simtime.iter().current_iteration(),
+         )?;
+-        let total_vent_heat_loss = calc_vent_heat_transfer_coeff(zone.volume, air_changes_per_hour);
+-
+-        // Calculate fabric heat loss and total floor area
+-        let total_fabric_heat_loss = FSum::with_all(
+-            zone.building_elements
+-                .values()
+-                .map(calc_heat_loss)
+-                .try_collect::<f64, Vec<f64>, anyhow::Error>()?,
+-        )
+-        .value();
++        let vent_heat_loss = calc_vent_heat_transfer_coeff(zone.volume, air_changes_per_hour);
++
++        // Calculate per-element fabric heat loss. The total is still summed with
++        // FSum over the same values in the same order as upstream, so the
++        // aggregate is bit-for-bit unchanged; only the breakdown is new.
++        let mut fabric_elements: Vec<(String, String, f64)> = Vec::new();
++        let mut fabric_heat_losses: Vec<f64> = Vec::new();
++        for (el_name, el_data) in zone.building_elements.iter() {
++            let (el_type, heat_loss) = calc_heat_loss(el_data)?;
++            fabric_elements.push((el_name.to_string().into(), el_type.into(), heat_loss));
++            fabric_heat_losses.push(heat_loss);
++        }
++        let total_fabric_heat_loss = FSum::with_all(fabric_heat_losses).value();
+ 
+         // Read in thermal bridging data
+-        let tb_heat_trans_coeff = calc_heat_transfer_coeff(&zone.thermal_bridging);
++        let thermal_bridges = calc_heat_transfer_coeff(&zone.thermal_bridging);
+ 
+-        Ok((
++        Ok(ZoneHtcResult {
+             total_fabric_heat_loss,
+-            tb_heat_trans_coeff,
+-            total_vent_heat_loss,
+-        ))
++            thermal_bridges,
++            vent_heat_loss,
++            air_changes_per_hour,
++            fabric_elements,
++        })
+     };
+ 
+     // Calculate the total fabric heat loss, total heat capacity, total ventilation heat
+@@ -660,24 +676,52 @@ pub fn calc_htc_hlp<T: InputForCalcHtcHlp>(input: &T) -> anyhow::Result<HtcHlpCa
+     let mut hlp_map: IndexMap<String, f64> = Default::default();
+     let mut zone_area: IndexMap<String, f64> = Default::default();
+ 
++    // Additional aggregates for the enhanced static output. These are new
++    // outputs; they do not feed back into total_htc / total_hlp.
++    let mut fabric_totals: Vec<f64> = Vec::new();
++    let mut thermal_bridge_totals: Vec<f64> = Vec::new();
++    let mut vent_totals: Vec<f64> = Vec::new();
++    let mut zone_volumes: Vec<f64> = Vec::new();
++    let mut volume_weighted_ach: Vec<f64> = Vec::new();
++    let mut all_fabric_elements: Vec<(String, String, f64)> = Vec::new();
++
+     for (z_name, zone) in input.zone().iter() {
+-        let (fabric_heat_loss, thermal_bridges, vent_heat_loss) = calc_htc(zone)?;
++        let result = calc_htc(zone)?;
+         // Calculate the heat transfer coefficent (HTC), in W / K
+         // TODO (from Python) check ventilation losses are correct
+-        let htc = fabric_heat_loss + thermal_bridges + vent_heat_loss;
++        let htc = result.total_fabric_heat_loss + result.thermal_bridges + result.vent_heat_loss;
+         let hlp = htc / zone.area;
+         htc_map.insert(z_name.into(), htc);
+         hlp_map.insert(z_name.into(), hlp);
+         zone_area.insert(z_name.into(), zone.area);
++
++        fabric_totals.push(result.total_fabric_heat_loss);
++        thermal_bridge_totals.push(result.thermal_bridges);
++        vent_totals.push(result.vent_heat_loss);
++        zone_volumes.push(zone.volume);
++        volume_weighted_ach.push(result.air_changes_per_hour * zone.volume);
++        all_fabric_elements.extend(result.fabric_elements);
+     }
+ 
+     let total_htc = FSum::with_all(htc_map.values()).value();
+     let total_floor_area = FSum::with_all(zone_area.values()).value();
+     let total_hlp = total_htc / total_floor_area;
+ 
++    let total_volume = FSum::with_all(zone_volumes).value();
++    let static_ach = if total_volume > 0.0 {
++        FSum::with_all(volume_weighted_ach).value() / total_volume
++    } else {
++        0.0
++    };
++
+     Ok(HtcHlpCalculation {
+         total_htc,
+         total_hlp,
++        total_fabric_heat_loss: FSum::with_all(fabric_totals).value(),
++        total_thermal_bridges: FSum::with_all(thermal_bridge_totals).value(),
++        total_vent_heat_loss: FSum::with_all(vent_totals).value(),
++        static_ach,
++        fabric_elements: all_fabric_elements,
+         htc_map,
+         _hlp_map: hlp_map,
+     })
+@@ -686,6 +730,12 @@ pub fn calc_htc_hlp<T: InputForCalcHtcHlp>(input: &T) -> anyhow::Result<HtcHlpCa
+ pub struct HtcHlpCalculation {
+     pub(crate) total_htc: f64,
+     pub(crate) total_hlp: f64,
++    pub(crate) total_fabric_heat_loss: f64,
++    pub(crate) total_thermal_bridges: f64,
++    pub(crate) total_vent_heat_loss: f64,
++    pub(crate) static_ach: f64,
++    /// (element_name, element_type, heat_loss_w_per_k)
++    pub(crate) fabric_elements: Vec<(String, String, f64)>,
+     pub htc_map: IndexMap<String, f64>,
+     pub(crate) _hlp_map: IndexMap<String, f64>,
+ }
+@@ -2857,6 +2907,11 @@ impl Corpus {
+         let HtcHlpCalculation {
+             total_htc: heat_trans_coeff,
+             total_hlp: heat_loss_param,
++            total_fabric_heat_loss,
++            total_thermal_bridges,
++            total_vent_heat_loss,
++            static_ach,
++            fabric_elements,
+             ..
+         } = calc_htc_hlp(self.input.as_ref())?;
+ 
+@@ -2868,6 +2923,11 @@ impl Corpus {
+             heat_loss_param,
+             heat_capacity_param,
+             heat_loss_form_factor,
++            total_fabric_heat_loss,
++            total_thermal_bridges,
++            total_vent_heat_loss,
++            static_ach,
++            fabric_elements,
+             temperature_air_internal: self.input.temp_internal_air_static_calcs(),
+             temperature_air_external: self.external_conditions.air_temp_annual_daily_average_min(),
+         })
+diff --git a/src/lib.rs b/src/lib.rs
+index ab2fcab8..36ccc898 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1043,6 +1043,26 @@ fn write_core_output_file_static(
+         "W / K".to_owned(),
+         output.heat_transfer_coefficient.to_string(),
+     ])?;
++    writer.write_record([
++        "Fabric heat transfer coefficient".to_owned(),
++        "W / K".to_owned(),
++        output.total_fabric_heat_loss.to_string(),
++    ])?;
++    writer.write_record([
++        "Thermal bridges heat transfer coefficient".to_owned(),
++        "W / K".to_owned(),
++        output.total_thermal_bridges.to_string(),
++    ])?;
++    writer.write_record([
++        "Ventilation heat transfer coefficient".to_owned(),
++        "W / K".to_owned(),
++        output.total_vent_heat_loss.to_string(),
++    ])?;
++    writer.write_record([
++        "Air changes per hour (static)".to_owned(),
++        "1/h".to_owned(),
++        output.static_ach.to_string(),
++    ])?;
+     writer.write_record([
+         "Heat loss parameter".to_owned(),
+         "W / m2.K".to_owned(),
+@@ -1058,6 +1078,14 @@ fn write_core_output_file_static(
+         "".to_owned(),
+         output.heat_loss_form_factor.to_string(),
+     ])?;
++    writer.write_record(["Per-element fabric breakdown:"])?;
++    for (el_name, el_type, heat_loss) in &output.fabric_elements {
++        writer.write_record([
++            format!("Fabric element: {} ({})", el_name, el_type),
++            "W / K".to_owned(),
++            heat_loss.to_string(),
++        ])?;
++    }
+     writer.write_record(["Assumptions used for HTC/HLP calculation:"])?;
+     writer.write_record([
+         "Internal air temperature".to_owned(),
+diff --git a/src/output.rs b/src/output.rs
+index 640a297b..df9ca8bb 100644
+--- a/src/output.rs
++++ b/src/output.rs
+@@ -18,6 +18,16 @@ pub struct OutputStatic {
+     pub heat_capacity_param: f64,
+     /// Heat loss form factor
+     pub heat_loss_form_factor: f64,
++    /// Fabric component of the heat transfer coefficient (unit: W/K)
++    pub total_fabric_heat_loss: f64,
++    /// Thermal-bridging component of the heat transfer coefficient (unit: W/K)
++    pub total_thermal_bridges: f64,
++    /// Ventilation component of the heat transfer coefficient (unit: W/K)
++    pub total_vent_heat_loss: f64,
++    /// Volume-weighted air changes per hour used for the static calculation (unit: 1/h)
++    pub static_ach: f64,
++    /// Per-element fabric breakdown: (element_name, element_type, heat_loss_w_per_k)
++    pub fabric_elements: Vec<(String, String, f64)>,
+     /// Internal air temperature (unit: ˚C)
+     pub temperature_air_internal: f64,
+     /// External air temperature (unit: ˚C)
