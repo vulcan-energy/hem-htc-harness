@@ -30,7 +30,7 @@ dependencies = [
 [project.urls]
 Homepage = "https://usevulcan.app/h3"
 Source = "https://github.com/vulcan-energy/hem-htc-harness"
-Documentation = "https://usevulcan.app/h3/docs"
+Documentation = "https://github.com/vulcan-energy/hem-htc-harness/tree/main/docs"
 Issues = "https://github.com/vulcan-energy/hem-htc-harness/issues"
 
 [project.scripts]
