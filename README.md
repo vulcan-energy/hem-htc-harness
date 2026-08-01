@@ -13,10 +13,10 @@ contact `info@usevulcan.app`.
 `h3` is an independent tool that reads Home Energy Model output. It is not
 produced, endorsed or certified by MHCLG or by any HEM governance body.
 
-The supported public product has two surfaces: a local Rust/FHS CLI for real
-projects, and a fixed synthetic browser sandbox for explaining the method. The
-browser does not accept project uploads, and h3 contains no private Python/Azure
-engine integration.
+h3 has two supported surfaces: this CLI, which drives patched builds of the
+public Rust HEM engine and FHS wrapper locally for real projects, and a fixed
+synthetic browser sandbox that explains the method. The sandbox accepts no
+project uploads; real projects always run locally through the CLI.
 
 ## Documentation
 
@@ -45,14 +45,13 @@ python -m pip install -e ".[plot]"
 h3 setup
 ```
 
-This will:
+`h3 setup` then:
 
-1. check prerequisites,
-2. create `.venv`,
-3. install dependencies,
-4. build the patched HEM and FHS binaries,
-5. prompt for paths,
-6. run `h3 doctor`.
+1. checks prerequisites,
+2. reuses `.venv`, creating it and installing dependencies only if needed,
+3. builds the patched HEM and FHS binaries,
+4. prompts for paths,
+5. runs `h3 doctor`.
 
 You do **not** need a local HEM repo checkout. `h3 setup` clones the pinned
 commit automatically from `patches/manifest.json`.

@@ -99,7 +99,7 @@ used.
 
 ## Scope of the docs
 
-This first pass focuses on public, user-facing documentation:
+These docs focus on the public, user-facing surface:
 
 - methodology,
 - command workflows,

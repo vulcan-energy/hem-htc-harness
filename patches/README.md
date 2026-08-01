@@ -20,6 +20,12 @@ Patches within a source apply **in order** and may depend on each other:
 `0002-ach-calibration` modifies a line that `0001-actual-ach` introduces, so it
 will not apply to a pristine checkout on its own.
 
+Patch numbers are stable identifiers and are not reused, so the sequence may
+have gaps: `0003` was the FHS heating-schedule patch while the wrapper still
+lived in the engine repository, and it became
+`patches/fhs/0001-disable-heating-schedule.patch` when the wrapper moved to its
+own repository.
+
 `scripts/check_licensing.py` enforces that every patch named in the manifest
 exists on disk, and that every patch on disk is declared in the manifest.
 
@@ -27,7 +33,8 @@ exists on disk, and that every patch on disk is declared in the manifest.
 
 The Rust patches must be **default-inert**: with no h3 environment variables set,
 a patched build must produce results identical to an unpatched build at the same
-commit. This is what allows Vulcan and h3 to share a single engine build.
+commit. This keeps a patched build interchangeable with an unpatched build for
+any other consumer of the same engine.
 
 | Patch | Gate |
 |---|---|

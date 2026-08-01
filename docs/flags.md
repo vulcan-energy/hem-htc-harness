@@ -9,7 +9,7 @@ These can be supplied before the command name:
 
 | Flag | Meaning |
 |---|---|
-| `--config PATH` | Use a non-default config file instead of `~/.config/htc-harness/config.json`. |
+| `--config PATH` | Use a non-default config file instead of `~/.config/htc-harness/config.json`. Also settable through the `HTC_HARNESS_CONFIG` environment variable; the flag wins when both are set. |
 | `--input-dir PATH` | Override the configured input directory for this invocation. |
 | `--weather-dir PATH` | Override the configured weather directory for this invocation. |
 | `--external-conditions-dir PATH` | Override the configured external-conditions directory for this invocation. |
