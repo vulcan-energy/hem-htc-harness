@@ -39,13 +39,11 @@ import {
 const PYODIDE_VERSION = "314.0.3";
 const PYODIDE_URL = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
 
-// The engine is NOT copied into the demo bundle. It is the same artifact the
-// rest of the site loads, at a stable same-origin path, refreshed by the site's
-// own release pipeline. A second copy would be a second thing to keep in step,
-// and the one that went stale would still run and still report numbers.
-// Absolute, because it is also used as the base for resolving the .wasm
-// beside it, and `new URL(name, base)` rejects a root-relative base.
-const ENGINE_URL = new URL("/launch/wasm_wrapper.js", self.location.origin).href;
+// The engine is NOT copied into the demo bundle. It is a pinned Vulcan HEM
+// target bundle the site already serves at a stable same-origin path, named by
+// `engine_module` in h3-demo.json. A second copy would be a second thing to keep
+// in step, and the one that went stale would still run and still report numbers.
+let engineUrl = null;
 
 // Everything h3 publishes sits beside this file.
 const BUNDLE_BASE = new URL("./", import.meta.url);
@@ -114,7 +112,7 @@ function assertEngineMatches(manifest, module) {
   const exported = module[name];
   if (typeof exported !== "function") {
     throw new Error(
-      `The Home Energy Model build at ${ENGINE_URL} does not export ${name}. ` +
+      `The Home Energy Model build at ${engineUrl} does not export ${name}. ` +
         `It is older than this demo bundle and cannot run it.`,
     );
   }
@@ -122,7 +120,7 @@ function assertEngineMatches(manifest, module) {
   const arity = manifest.engine_export_arity;
   if (typeof arity === "number" && exported.length !== arity) {
     throw new Error(
-      `${name} at ${ENGINE_URL} takes ${exported.length} parameters, ` +
+      `${name} at ${engineUrl} takes ${exported.length} parameters, ` +
         `but this demo bundle needs ${arity}. The engine and the bundle are ` +
         `from different releases.`,
     );
@@ -140,12 +138,20 @@ async function init() {
   pyodide = await loadPyodide({ indexURL: PYODIDE_URL });
   progress("python", 0.2, "Python ready");
 
+  if (!manifest?.engine_module) {
+    throw new Error("h3-demo.json does not name the engine module");
+  }
+  // Absolute, because it is also the base for resolving the .wasm beside it.
+  engineUrl = new URL(manifest.engine_module, self.location.origin).href;
+
   // The engine, fetched by hand so the download can be reported. wasm-bindgen
   // would otherwise fetch it itself, silently, from inside module.default().
+  // The target bundle's wasm is hem_bg.wasm; its generated JavaScript still
+  // defaults to wasm_wrapper_bg.wasm, so the name is given here.
   progress("engine", 0.2, "Downloading the Home Energy Model");
-  const module = await import(ENGINE_URL);
+  const module = await import(engineUrl);
   const wasmBytes = await fetchWithProgress(
-    new URL(module.WASM_FILENAME ?? "wasm_wrapper_bg.wasm", ENGINE_URL).href,
+    new URL("hem_bg.wasm", engineUrl).href,
     (fraction) =>
       progress(
         "engine",
@@ -177,33 +183,33 @@ async function init() {
   post({ type: "ready" });
 }
 
-function runHem({
-  modelJson,
-  weatherEpw,
-  heatBalance,
-  fhsAssumptions,
-  preprocessOnly,
-}) {
-  // A build predating either extra parameter ignores it. Missing
-  // fhs_assumptions means the build runs core; missing preprocess_only means
-  // it simulates rather than returning the preprocessed model, and h3 then
-  // reports that no `__preproc.json` was written rather than silently running
-  // the standard heating schedule.
-  const raw = engine.run_hem_for_h3(
-    modelJson,
-    weatherEpw ?? "",
-    heatBalance,
-    Boolean(fhsAssumptions),
-    Boolean(preprocessOnly),
-  );
-  const result = JSON.parse(raw);
-  // The export signals failure as { error: "..." }. Without this check the
-  // bridge would happily write a file literally named "error" and h3 would
-  // then fail much later with a confusing missing-column message.
-  if (result && typeof result.error === "string") {
-    throw new Error(`HEM engine failed: ${result.error}`);
+function runHem({ modelJson, weatherEpw, fhsAssumptions, preprocessOnly }) {
+  // h3 makes two engine calls per run: the FHS wrapper, preprocess only, with
+  // the weather; then the core engine on the flattened model, whose weather the
+  // preprocessing already baked in. The target's core stage always writes the
+  // heat-balance files h3 reads.
+  let stage;
+  if (fhsAssumptions && preprocessOnly) stage = "preprocess";
+  else if (!fhsAssumptions && !preprocessOnly) stage = "core";
+  else {
+    throw new Error(
+      `HEM engine call not supported in the browser: ` +
+        `fhs_assumptions=${fhsAssumptions}, preprocess_only=${preprocessOnly}`,
+    );
   }
-  return result;
+  const result = JSON.parse(
+    engine.run_target_stage(
+      modelJson,
+      stage,
+      stage === "preprocess" ? weatherEpw ?? undefined : undefined,
+    ),
+  );
+  // Failure is { status: "failed", error }. Without this check h3 would fail
+  // much later with a confusing missing-column message.
+  if (result?.status !== "calculated") {
+    throw new Error(`HEM engine failed: ${result?.error ?? result?.status}`);
+  }
+  return result.files;
 }
 
 // One run at a time. Pyodide is single-threaded and the runs share a virtual

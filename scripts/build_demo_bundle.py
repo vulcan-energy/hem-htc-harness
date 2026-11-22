@@ -16,8 +16,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SANDBOX_CONTRACT_VERSION = 2
-REQUIRED_ENGINE_EXPORT = "run_hem_for_h3"
-ENGINE_EXPORT_ARITY = 5
+# The pinned Vulcan HEM target bundle the worker drives, served same-origin by
+# the site. a7, because the sandbox dwelling is an a7-schema model.
+ENGINE_MODULE = "/hem-targets/rust-fhs-a7-62d3df70-c5ba2673-v1/preparation/hem.js"
+REQUIRED_ENGINE_EXPORT = "run_target_stage"
+ENGINE_EXPORT_ARITY = 3
 
 
 def _single_wheel(dist_dir: Path) -> Path:
@@ -53,6 +56,7 @@ def build_demo_bundle(
         "wheel": wheel.name,
         "wheel_sha256": hashlib.sha256(wheel.read_bytes()).hexdigest(),
         "commit": commit,
+        "engine_module": ENGINE_MODULE,
         "requires_engine_export": REQUIRED_ENGINE_EXPORT,
         "engine_export_arity": ENGINE_EXPORT_ARITY,
         "sandbox_contract_version": SANDBOX_CONTRACT_VERSION,
