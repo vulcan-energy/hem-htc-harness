@@ -28,12 +28,18 @@ runs.
 
 ## Engine contract
 
-The host provides the same-origin `run_hem_for_h3` WASM export:
+The host serves a pinned Vulcan HEM target bundle at the same-origin path
+named by `engine_module` in `h3-demo.json` (today the a7 target, because the
+sandbox dwelling is an a7-schema model). The worker drives its export:
 
 ```text
-run_hem_for_h3(model_json, weather_epw, heat_balance, fhs_assumptions,
-               preprocess_only) -> { filename: contents }
+run_target_stage(model_json, "preprocess", weather_epw) -> { status, files }
+run_target_stage(model_json, "core")                     -> { status, files }
 ```
+
+`preprocess` runs the FHS wrapper without simulating and returns the
+preprocessed model; `core` runs the core engine, heat balance on, on the
+flattened model. The bundle's wasm is `hem_bg.wasm`, beside `engine_module`.
 
 The worker checks the required export and arity recorded in `h3-demo.json`
 before running. The browser uses FHS preprocessing, flattens the heating schedule

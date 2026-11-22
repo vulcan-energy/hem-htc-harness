@@ -53,8 +53,9 @@ def test_generated_demo_bundle_carries_the_v2_sandbox_contract(
         "wheel": wheel.name,
         "wheel_sha256": hashlib.sha256(wheel.read_bytes()).hexdigest(),
         "commit": "a" * 40,
-        "requires_engine_export": "run_hem_for_h3",
-        "engine_export_arity": 5,
+        "engine_module": "/hem-targets/rust-fhs-a7-62d3df70-c5ba2673-v1/preparation/hem.js",
+        "requires_engine_export": "run_target_stage",
+        "engine_export_arity": 3,
         "sandbox_contract_version": 2,
     }
     assert json.loads((bundle / "h3-demo.json").read_text()) == manifest
