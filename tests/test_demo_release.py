@@ -29,7 +29,7 @@ def test_generated_demo_bundle_carries_the_v2_sandbox_contract(
     tmp_path: Path,
 ) -> None:
     build_demo_bundle = _load_build_script()
-    wheel = tmp_path / "dist/htc_harness-0.1.0-py3-none-any.whl"
+    wheel = tmp_path / "dist/htc_harness-0.2.0-py3-none-any.whl"
     wheel.parent.mkdir()
     wheel.write_bytes(b"wheel under test")
     worker = tmp_path / "demo/worker.js"

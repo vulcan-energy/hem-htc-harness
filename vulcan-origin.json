@@ -9,8 +9,8 @@
   "additional_terms": "Vulcan-Origin-Terms-1.0",
   "source": {
     "repository": "https://github.com/vulcan-energy/hem-htc-harness",
-    "revision": "v0.1.0",
-    "archive": "https://github.com/vulcan-energy/hem-htc-harness/archive/refs/tags/v0.1.0.tar.gz"
+    "revision": "v0.2.0",
+    "archive": "https://github.com/vulcan-energy/hem-htc-harness/archive/refs/tags/v0.2.0.tar.gz"
   },
   "third_party": [
     {

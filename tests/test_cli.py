@@ -64,7 +64,7 @@ def test_version_reports_public_origin() -> None:
     result = CliRunner().invoke(main, ["--version"])
 
     assert result.exit_code == 0
-    assert "h3, version 0.1.0" in result.output
+    assert "h3, version 0.2.0" in result.output
     assert "Part of Vulcan Community" in result.output
 
 

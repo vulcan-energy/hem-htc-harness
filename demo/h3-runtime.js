@@ -8,7 +8,7 @@
 // Pyodide and a mock engine — see tests/demo/runtime.test.mjs. worker.js is a
 // thin message-passing shell over this.
 
-export const H3_WHEEL_NAME = "htc_harness-0.1.0-py3-none-any.whl";
+export const H3_WHEEL_NAME = "htc_harness-0.2.0-py3-none-any.whl";
 
 /** Verify the wheel bytes against the SHA-256 recorded by the release job. */
 export async function verifyWheelIntegrity(wheelBytes, expectedSha256) {
