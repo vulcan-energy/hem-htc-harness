@@ -42,4 +42,4 @@ __all__ = [
     "parse_heat_balance_air_node",
     "compute_design_htc",
 ]
-__version__ = "0.1.0"
+__version__ = "0.2.0"

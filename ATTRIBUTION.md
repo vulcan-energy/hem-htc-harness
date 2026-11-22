@@ -13,7 +13,7 @@ full or a substantial part of the AGPL-covered `h3` material:
 > supplemented by the Vulcan Origin Terms.
 >
 > Corresponding Source for this version:
-> `https://github.com/vulcan-energy/hem-htc-harness/tree/v0.1.0`
+> `https://github.com/vulcan-energy/hem-htc-harness/tree/v0.2.0`
 >
 > This product is not necessarily affiliated with or endorsed by Home Energy
 > Foundry Limited.
